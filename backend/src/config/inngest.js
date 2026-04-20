@@ -6,7 +6,7 @@ export const inngest = new Inngest({ id: "slack-clone" });
 
 // to create/sync user from inngest to mongoDB
 const syncUser = inngest.createFunction(
-  { id: "sync-user", triggers: [{ event: "clerk/user.created" }] },
+  { id: "sync-user", triggers: [{ event: "user.created" }] },
   async ({ event }) => {
     await connectDB();
     const { id, first_name, last_name, image_url, email_addresses } =
@@ -24,7 +24,7 @@ const syncUser = inngest.createFunction(
 );
 
 const deleteUserFromDB = inngest.createFunction(
-  { id: "delete-user-from-db", triggers: [{ event: "clerk/user.deleted" }] },
+  { id: "delete-user-from-db", triggers: [{ event: "user.deleted" }] },
   async ({ event }) => {
     await connectDB();
     const { id } = event.data;
