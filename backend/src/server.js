@@ -8,20 +8,8 @@ import { serve } from "inngest/express";
 const app = express();
 
 app.use(express.json());
+app.use(clerkMiddleware()); // req.auth will be available in the request object
 app.use("/api/inngest", serve({ client: inngest, functions }));
-app.use(clerkMiddleware); // req.auth will be available in the request object
-
-if (ENV.NODE_ENV === "production") {
-  app.use(async (req, res, next) => {
-    try {
-      await connectDB();
-      next();
-    } catch (error) {
-      console.error("DB connection error:", error);
-      res.status(500).send("Database connection failed");
-    }
-  });
-}
 
 app.get("/", (req, res) => {
   res.send("Hellow World !!!");
@@ -32,21 +20,20 @@ app.get("/", (req, res) => {
 //   connectDB();
 // });
 
-if (ENV.NODE_ENV !== "production") {
-  const startServer = async () => {
-    try {
-      await connectDB();
-
+const startServer = async () => {
+  try {
+    await connectDB();
+    if (ENV.NODE_ENV !== "production") {
       app.listen(ENV.PORT, () => {
         console.log("Server is running at PORT:", ENV.PORT);
       });
-    } catch (error) {
-      console.error("Error in starting the server:", error);
-      process.exit(1);
     }
-  };
+  } catch (error) {
+    console.error("Error in starting the server:", error);
+    process.exit(1);
+  }
+};
 
-  startServer();
-}
+startServer();
 
 export default app;
