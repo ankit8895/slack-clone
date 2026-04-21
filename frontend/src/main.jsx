@@ -1,21 +1,19 @@
+import { ClerkProvider } from "@clerk/react";
+import * as Sentry from "@sentry/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.jsx";
-import { ClerkProvider } from "@clerk/react";
+import { Toaster } from "react-hot-toast";
 import {
-  Routes,
-  Route,
   BrowserRouter,
-  useLocation,
-  useNavigationType,
   createRoutesFromChildren,
   matchRoutes,
+  useLocation,
+  useNavigationType,
 } from "react-router";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "react-hot-toast";
+import App from "./App.jsx";
+import "./index.css";
 import AuthProvider from "./providers/AuthProvider.jsx";
-import * as Sentry from "@sentry/react";
 
 const queryClient = new QueryClient();
 
