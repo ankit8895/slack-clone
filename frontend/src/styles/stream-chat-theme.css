@@ -1,4 +1,4 @@
-/* @import "stream-chat-react/dist/css/v2/index.css"; */
+@import "stream-chat-react/dist/css/v2/index.css";
 
 :root {
   --primary-color: #4a154b;
@@ -791,7 +791,6 @@
 }
 
 .radio-option {
-  display: flex;
   align-items: flex-start;
   gap: 1rem;
   padding: 1.25rem;
