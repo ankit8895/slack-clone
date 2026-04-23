@@ -1,8 +1,13 @@
 import { Inngest } from "inngest";
 import { User } from "../models/user.model.js";
 import { connectDB } from "./db.js";
-import { upsertStreamUser, deleteStreamUser } from "./stream.js";
+import {
+  upsertStreamUser,
+  deleteStreamUser,
+  addUserToPublicChannels,
+} from "./stream.js";
 
+// Create a client to send and receive events
 export const inngest = new Inngest({ id: "slack-clone" });
 
 // to create/sync user from inngest to mongoDB
@@ -27,6 +32,8 @@ const syncUser = inngest.createFunction(
       name: newUser.name,
       image: newUser.image,
     });
+
+    await addUserToPublicChannels(newUser.cherkId.toString());
   },
 );
 
