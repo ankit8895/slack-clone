@@ -42,9 +42,7 @@ createRoot(document.getElementById("root")).render(
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            <StreamClientProvider>
-              <App />
-            </StreamClientProvider>
+            <App />
           </AuthProvider>
           <Toaster position="top-right" />
         </QueryClientProvider>

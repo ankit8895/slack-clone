@@ -21,7 +21,7 @@ export const useStreamChat = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["streamToken"],
+    queryKey: ["streamChatToken"],
     queryFn: getStreamToken,
     enabled: !!user?.id, // !!user -> this will take object and convert it to a boolean
   });
@@ -31,6 +31,12 @@ export const useStreamChat = () => {
     if (!tokenData?.token || !user?.id || !STREAM_API_KEY) return;
 
     const client = StreamChat.getInstance(STREAM_API_KEY);
+
+    // If already connected as the same user, skip reconnect
+    if (client.userID === user.id) {
+      setChatClient(client);
+      return;
+    }
     let cancelled = false;
 
     const connect = async () => {
@@ -66,7 +72,9 @@ export const useStreamChat = () => {
     // cleanup function
     return () => {
       cancelled = true;
-      client.disconnectUser();
+      // Don't disconnect here — only disconnect on sign-out
+      // client.disconnectUser() was killing the session on every remount
+      // client.disconnectUser();
     };
   }, [tokenData?.token, user?.id]);
 

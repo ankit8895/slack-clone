@@ -17,7 +17,7 @@ const CallPage = () => {
   const { id: callId } = useParams();
   const { isLoaded } = useUser();
   const client = useStreamVideoClient(); // comes from StreamClientProvider above
-
+  console.log("Stream client from context:", client);
   const [call, setCall] = useState(null);
   const [isConnecting, setIsConnecting] = useState(true);
 

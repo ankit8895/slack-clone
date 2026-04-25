@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import AuthPage from "./pages/AuthPage";
 import CallPage from "./pages/CallPage";
 import * as Sentry from "@sentry/react";
+import StreamClientProvider from "./providers/StreamClientProvider";
 
 const SentryRoutes = Sentry.withSentryReactRouterV7Routing(Routes);
 
@@ -23,7 +24,15 @@ const App = () => {
       />
       <Route
         path="/call/:id"
-        element={isSignedIn ? <CallPage /> : <Navigate to={"/auth"} replace />}
+        element={
+          isSignedIn ? (
+            <StreamClientProvider>
+              <CallPage />
+            </StreamClientProvider>
+          ) : (
+            <Navigate to={"/auth"} replace />
+          )
+        }
       />
 
       <Route
