@@ -14,6 +14,7 @@ import {
 import App from "./App.jsx";
 import "./index.css";
 import AuthProvider from "./providers/AuthProvider.jsx";
+import StreamClientProvider from "./providers/StreamClientProvider.jsx";
 
 const queryClient = new QueryClient();
 
@@ -41,7 +42,9 @@ createRoot(document.getElementById("root")).render(
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            <App />
+            <StreamClientProvider>
+              <App />
+            </StreamClientProvider>
           </AuthProvider>
           <Toaster position="top-right" />
         </QueryClientProvider>
