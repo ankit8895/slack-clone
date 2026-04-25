@@ -1,8 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router";
-import { useChatContext } from "stream-chat-react";
 import * as Sentry from "@sentry/react";
-import toast from "react-hot-toast";
 import {
   AlertCircleIcon,
   HashIcon,
@@ -10,6 +6,10 @@ import {
   UsersIcon,
   XIcon,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useSearchParams } from "react-router";
+import { useChatContext } from "stream-chat-react";
 
 const CreateChannelModal = ({ onClose }) => {
   const [channelName, setChannelName] = useState("");
@@ -38,7 +38,11 @@ const CreateChannelModal = ({ onClose }) => {
           { name: 1 }, // for sorting show members from name A to Z
           { limit: 100 }, // get first 100 members
         );
-        setUsers(response.users || []);
+
+        const usersOnly = response.users.filter(
+          (user) => !user.id.startsWith("recording-"),
+        );
+        setUsers(usersOnly || []);
       } catch (error) {
         console.log("Error fetching users:", error);
         Sentry.captureException(error, {
@@ -53,16 +57,7 @@ const CreateChannelModal = ({ onClose }) => {
     fetchUsers();
   }, [client]);
 
-  // // reset the form to open
-  // useEffect(() => {
-  //   setChannelName("");
-  //   setDescription("");
-  //   setChannelType("public");
-  //   setError("");
-  //   setSelectedMembers([]);
-  // }, []);
-
-  //auto select all users for pulic channel
+  //auto select all users for public channel
   useEffect(() => {
     if (channelType === "public") setSelectedMembers(users.map((u) => u.id));
     else setSelectedMembers([]);
